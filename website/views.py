@@ -80,3 +80,18 @@ def add_record(request):
     else:
         messages.error(request,"Login first");
         return redirect('home');
+    
+def update_record(request,pk):
+    if request.user.is_authenticated:
+        curent_record = Record.objects.get(id=pk);
+        form = AddForm(request.POST or None,instance=curent_record);
+        if form.is_valid():
+            form.save();
+            messages.success(request,"Update successfully");
+            return redirect('home');
+        return render(request,'update_record.html',{'form':form});
+    else:
+        messages.error(request,"Login first");
+        return redirect('home');
+   
+            
