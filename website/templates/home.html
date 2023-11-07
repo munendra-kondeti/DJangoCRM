@@ -43,7 +43,6 @@
 <br>
 <form method='POST' action="{% url 'home' %}">
     {% csrf_token %}
-    <form>
         <div class="mb-3">
             <input type="text" class="form-control" name="userName" placeholder="User Name" required>
         </div>
@@ -52,7 +51,6 @@
         </div>
         <br />
         <button type="submit" class="btn btn-secondary">Login</button>
-    </form>
 </form>
 </div>
 {% endif %}
