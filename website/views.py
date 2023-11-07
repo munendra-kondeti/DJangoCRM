@@ -37,11 +37,14 @@ def register_user(request):
         if form.is_valid():
             form.save();
             username = form.cleaned_data['username'];
-            password = form.cleaned_data['password1'];
+            password = form.cleaned_data['password'];
             user = authenticate(username=username,password= password);
             login(request,user);
             messages.success(request,"You register successfully");
             return redirect('home');
+        else:
+            messages.error(request,"Invalid details");
+            return redirect('register');
     else:
         form = SignupForm();
         return render(request,'register.html',{'form':form});
