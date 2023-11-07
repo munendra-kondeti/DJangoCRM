@@ -2,9 +2,11 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout;
 from django.contrib import messages;
 from .forms import SignupForm
+from .models import Record;
 # Create your views here.
 
 def home(request):
+    records = Record.objects.all();
     # check to see if the user is logged in
     if request.method == 'POST':
         userName = request.POST.get('userName'); 
@@ -19,7 +21,7 @@ def home(request):
             messages.error(request,"Invalid username or password");
             return redirect('home');
     else:
-        return render(request,'home.html',{});
+        return render(request,'home.html',{'records':records});
 
 def login_user(request):
     return render(request,'login.html',{});
@@ -43,3 +45,21 @@ def register_user(request):
     else:
         form = SignupForm();
         return render(request,'register.html',{'form':form});
+    
+def customer_record(request,pk):
+    if request.user.is_authenticated:
+        customer_record = Record.objects.get(id=pk);
+        return render(request,'record.html',{'record':customer_record});
+    else:
+        messages.error(request,"Login first");
+        return redirect('home');
+   
+def delete_record(request,pk):
+    if request.user.is_authenticated:
+        customer_record = Record.objects.get(id=pk);
+        customer_record.delete();
+        messages.success(request,"Delete successfully");
+        return redirect('home');
+    else:
+        messages.error(request,"Login first");
+        return redirect('home'); 
